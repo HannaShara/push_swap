@@ -22,10 +22,10 @@
 typedef struct s_stack
 {
 	int				nbr;
+	int				target_b;
+	int				target_a;
 	int				index;
 	int				pos;
-	int				cost_a;
-	int				cost_b;
 	struct s_stack	*next;
 }	t_stack;
 

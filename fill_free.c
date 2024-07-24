@@ -66,10 +66,13 @@ void    free_stack(t_stack **stack)
 
 /*
 Attribue des indices décroissants aux éléments de la pile 
-en fonction de l'ordre décroissant de leurs valeurs. 
+en fonction de l'ordre décroissant de leurs valeurs. *		
+nbr:		-3	 0	 9	 2
+index:		[1]	[2]	[4]	[3]
+
 */
 
-void    stack_index(t_stack *stack_a, int size)
+void    stack_index(t_stack *stack, int size)
 {
     t_stack *ptr;
     t_stack *top;
@@ -77,7 +80,7 @@ void    stack_index(t_stack *stack_a, int size)
 
     while (--size > 0)
     {
-        ptr = stack_a;
+        ptr = stack;
         nbr = INT_MIN;
         top = NULL;
         while (ptr)
@@ -88,7 +91,7 @@ void    stack_index(t_stack *stack_a, int size)
             {
                 nbr = ptr->nbr;
                 top = ptr;
-                ptr = stack_a;
+                ptr = stack;
             }
             else
                 ptr = ptr->next;

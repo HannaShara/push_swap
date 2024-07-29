@@ -32,7 +32,7 @@ void	sa(t_stack **stack_a)
 	ft_printf("sa\n");
 }
 
-void	sa(t_stack **stack_b)
+void	sb(t_stack **stack_b)
 {
 	ft_swap(*stack_b);
 	ft_printf("sb\n");

@@ -17,7 +17,7 @@ int	arg_is_number(char *argv)
 	int	i;
 
 	i = 0;
-	if (argv[i] == '+' || argv[i] == '-' && argv[i + 1] != '\0')
+	if ((argv[i] == '+' || argv[i] == '-') && argv[i + 1] != '\0')
 		i++;
 	while (argv[i] && ft_isdigit(argv[i]))
 		i++;
@@ -51,7 +51,7 @@ int	check_duplicata(char **argv)
 		j = 1;
 		while (argv[j])
 		{
-			if (j != i && ft_nbrcmp(argv[i], argv[j] == 0))
+			if (j != i && !ft_nbrcmp(argv[i], argv[j]))
 				return (1);
 			j++;
 		}
@@ -60,7 +60,7 @@ int	check_duplicata(char **argv)
 	return (0);
 }
 
-int	check_input(int argc, char **argv)
+int	check_input(char **argv)
 {
 	int	i;
 	int	zero;
@@ -69,7 +69,7 @@ int	check_input(int argc, char **argv)
 	zero = 0;
 	while (argv[i])
 	{
-		if (arg_is_number(argv[i]) == 0)
+		if (!arg_is_number(argv[i]))
 			return (0);
 		zero += arg_is_zero(argv[i]);
 		i++;

@@ -28,8 +28,6 @@ t_stack *new_stack(int nbr)
     if (!new)
     	ft_error(NULL, NULL);
     new->nbr = nbr;
-    new->target_a = -1;
-    new->target_b = -1;
     new->index = -1;
     new->pos = -1;
     new->next = NULL;

@@ -147,13 +147,26 @@ int main(int argc, char *argv[])
     t_stack *stack_a;
     t_stack *stack_b;
     int     size;
+    int     flag;
 
-    if (argc < 2 || (argc == 2 && !check_argv(argv[1]))
-        || (!check_input(argv)))
-        ft_error(NULL, NULL);
+    flag = 1;
+    if (argc < 2)
+        return (0);
+    if (argc > 2 && !check_input(argv))
+        return (write(2, "Error\n", 6));
     if (argc == 2 && check_argv(argv[1]))
+    {
         argv = ft_split(argv[1],' ');
-    stack_a = fill_stack(argc, argv);
+        argc = 0;
+        while (argv[argc] != NULL)
+            argc++;
+        flag = 0;
+    }
+    printf("%s\n", argv[0]);
+    printf("%s\n", argv[1]);
+    printf("%s\n", argv[2]);
+    printf("%d\n", argc);
+    stack_a = fill_stack(argc, argv, flag);
     stack_b = NULL;
     size = stack_size(stack_a);
     stack_index(stack_a, size + 1);

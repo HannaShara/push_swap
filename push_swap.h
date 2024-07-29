@@ -27,7 +27,7 @@ typedef struct s_stack
 	struct s_stack	*next;
 }	t_stack;
 
-t_stack *fill_stack(int argc, char *argv[]);
+t_stack *fill_stack(int argc, char *argv[], int i);
 void    free_stack(t_stack **stack);
 void    stack_index(t_stack *stack, int size);
 
@@ -75,7 +75,7 @@ void	sb(t_stack **stack_b);
 void	ss(t_stack **stack_a, t_stack **stack_b);
 
 int	ft_nbrcmp(const char *s1, const char *s2);
-void	ft_error(t_stack **stack_a, t_stack **stack_b);
+int	ft_error(t_stack **stack_a, t_stack **stack_b);
 int	check_argv(char *s1);
 int	stack_is_empty(t_stack *stack);
 

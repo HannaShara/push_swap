@@ -43,7 +43,7 @@ t_stack *get_bottom(t_stack *stack)
 
 t_stack *get_before_bottom(t_stack *stack)
 {
-    while (stack && stack->next->next != NULL)
+    while (stack && stack->next && stack->next->next != NULL)
         stack = stack->next;
     return (stack);
 }

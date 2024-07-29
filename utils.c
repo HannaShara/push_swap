@@ -23,7 +23,8 @@ int	ft_nbrcmp(const char *s1, const char *s2)
 		i++;
 	if (s2[j] == '+')
 		j++;
-	while (s1 && s2 && s1[i] == s2[i])
+	while (s1[i] != '\0' && s2[i] != '\0' 
+		&& s1[i] == s2[i])
     {
 		i++;
 		j++;
@@ -31,13 +32,14 @@ int	ft_nbrcmp(const char *s1, const char *s2)
 	return ((unsigned char)s1[i] - (unsigned char)s2[j]);
 }
 
-void	ft_error(t_stack **stack_a, t_stack **stack_b)
+int	ft_error(t_stack **stack_a, t_stack **stack_b)
 {
 	if (*stack_a != NULL)
 		free_stack(stack_a);
 	if (*stack_b != NULL)
 		free_stack(stack_b);
 	write(2, "Error\n", 6);
+	return (2);
 }
 
 int	check_argv(char *s1)

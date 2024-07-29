@@ -1,0 +1,736 @@
+
+#include "push_swap.h"
+
+/*
+Vous devez écrire un programme nommé push_swap qui prend en paramètre la
+pile a sous la forme d’une liste d’entiers. Le premier paramètre est au 
+sommet de la pile (attention donc à l’ordre).
+*/
+
+t_stack *fill_stack(int argc, char *argv[])
+{
+    int     i;
+    int     nbr;
+    t_stack *stack_a;
+
+    stack_a = NULL;
+    i = 1;
+    while (i < argc)
+    {
+        nbr = ft_atoi(argv[i]);
+        if (nbr > INT_MAX || nbr < INT_MIN)
+            ft_error(&stack_a, NULL);
+        if (i == 1)
+            stack_a = new_stack((int)nbr);
+        else
+            add_bottom(&stack_a, new_stack((int)nbr));
+        i++;
+    }
+    return(stack_a);
+}
+
+/*
+(1) Un double pointeur est nécessaire car la fonction doit pouvoir modifier 
+le pointeur vers le début de la pile.
+(2)Vérification de stack : !stack vérifie si le pointeur stack lui-même est NULL. 
+Dans ce cas, il n'y a rien à libérer car il n'y a pas de pile à gérer. 
+Vérification de *stack : !(*stack) vérifie si le pointeur pointé par stack
+(c'est-à-dire, le début de la pile) est NULL. 
+Cela signifie que la pile est vide, c'est-à-dire, elle ne contient aucun élément. 
+*/
+
+void    free_stack(t_stack **stack)
+{
+    t_stack *tmp;
+
+    if (!stack || !(*stack))
+        return;
+    while (*stack)
+    {
+        tmp = (*stack)->next;
+        free((*stack));
+        *stack = tmp;
+    }
+    *stack = NULL;
+}
+
+/*
+Attribue des indices décroissants aux éléments de la pile 
+en fonction de l'ordre décroissant de leurs valeurs. *		
+nbr:		-3	 0	 9	 2
+index:		[1]	[2]	[4]	[3]
+
+*/
+
+void    stack_index(t_stack *stack, int size)
+{
+    t_stack *ptr;
+    t_stack *top;
+    int     nbr;
+
+    while (--size > 0)
+    {
+        ptr = stack;
+        nbr = INT_MIN;
+        top = NULL;
+        while (ptr)
+        {
+            if (ptr->nbr == INT_MIN && ptr->index == 0)
+                ptr->index = 1;
+            if (ptr->nbr > nbr && ptr->index == 0)
+            {
+                nbr = ptr->nbr;
+                top = ptr;
+                ptr = stack;
+            }
+            else
+                ptr = ptr->next;
+        }
+        if (top != NULL)
+            top->index = size;
+    }
+
+#include "push_swap.h"
+
+int	arg_is_number(char *argv)
+{
+	int	i;
+
+	i = 0;
+	if ((argv[i] == '+' || argv[i] == '-') && argv[i + 1] != '\0')
+		i++;
+	while (argv[i] && ft_isdigit(argv[i]))
+		i++;
+	if (argv[i] != '\0' && !ft_isdigit(argv[i]))
+		return (0);
+	return (1);
+}
+
+int	arg_is_zero(char *argv)
+{
+	int	i;
+
+	i = 0;
+	if (argv[i] == '+' || argv[i] == '-')
+		i++;
+	while (argv[i] == '0')
+		i++;
+	if (argv[i] != '\0')
+		return (0);
+	return (1);
+}
+
+int	check_duplicata(char **argv)
+{
+	int	i;
+	int	j;
+
+	i = 1;
+	while (argv[i])
+	{
+		j = 1;
+		while (argv[j])
+		{
+			if (j != i && !ft_nbrcmp(argv[i], argv[j]))
+				return (1);
+			j++;
+		}
+		i++;
+	}
+	return (0);
+}
+
+int	check_input(char **argv)
+{
+	int	i;
+	int	zero;
+
+	i = 1;
+	zero = 0;
+	while (argv[i])
+	{
+		if (!arg_is_number(argv[i]))
+			return (0);
+		zero += arg_is_zero(argv[i]);
+		i++;
+	}
+	if (zero > 1)
+		return (0);
+	if (check_duplicata(argv))
+		return (0);
+	return (1);
+}
+
+#include "push_swap.h"
+
+int find_biggest(t_stack *stack)
+{
+    int biggest;
+
+    biggest = stack->nbr;
+    while(stack)
+    {
+        if (biggest < stack->nbr)
+            biggest = stack->nbr;
+        stack = stack->next;
+    }
+    return (biggest);
+}
+
+void    sort_three(t_stack **stack)
+{
+    int biggest;
+
+    if (check_sorted(*stack))
+        return;
+    biggest = find_biggest(*stack);
+    if ((*stack)->nbr == biggest)
+        ra(stack);
+    else if ((*stack)->next->nbr == biggest)
+        rra(stack);
+    if ((*stack)->nbr > (*stack)->next->nbr)
+        sa(stack);
+}
+
+int find_smallest(t_stack *stack)
+{
+    int smallest;
+
+    smallest = stack->nbr;
+    while(stack)
+    {
+        if (smallest > stack->nbr)
+            smallest = stack->nbr;
+        stack = stack->next;
+    }
+    return (smallest);
+}
+void    sort_three_reverse(t_stack **stack)
+{
+    int smallest;
+
+    if (check_sorted_reverse(*stack))
+        return;
+    smallest = find_smallest(*stack);
+    if ((*stack)->nbr == smallest)
+        rb(stack);
+    else if ((*stack)->next->nbr == smallest)
+        rrb(stack);
+    if ((*stack)->nbr < (*stack)->next->nbr)
+        sb(stack);
+}
+
+#include "push_swap.h"
+
+/*
+    Return 0 si ce n'est pas trie.
+*/
+
+int check_sorted(t_stack *stack)
+{
+    while (stack->next != NULL)
+    {
+        if (stack->nbr > stack->next->nbr)
+            return (0);
+        stack = stack->next;
+    }
+    return (1);
+}
+
+/*
+    Return 0 si ce n'est pas trie dans l'ordre decroissant.
+*/
+int check_sorted_reverse(t_stack *stack)
+{
+    while (stack->next != NULL)
+    {
+        if (stack->nbr < stack->next->nbr)
+            return (0);
+        stack = stack->next;
+    }
+    return (1);
+}
+void    push_swap(t_stack **stack_a, t_stack **stack_b, int size)
+{
+    if (size == 2 && !check_sorted(*stack_a))
+        sa(stack_a);
+    else if (size == 3 && !check_sorted(*stack_a))
+        sort_three(stack_a);
+    else if (size > 3 && !check_sorted(*stack_a))
+        quicksort(stack_a, stack_b);
+}
+
+int get_pivot(t_stack *stack, int i)
+{
+    while (stack->next != NULL || i != 0)
+    {
+        stack = stack->next;
+        i--;
+    }
+    return (stack->index);
+}
+
+/*
+    Fais la trie dans l'ordre decroissant pour pouvoir apres utiliser pa.
+*/
+
+void   quicksort_b(t_stack **stack_a, t_stack **stack_b)
+{
+    int pivot;
+    int size;
+
+    size = stack_size(*stack_b);
+    if (stack_size(*stack_b) <= 1 || check_sorted_reverse(*stack_b))
+        return;
+    pivot = get_pivot(*stack_b, size / 2);
+    while (!check_sorted_reverse(*stack_b) && *stack_b)
+    {
+        if (size == 2)
+            sb(stack_b);
+        else if (size == 3)
+            sort_three_reverse(stack_b);
+        else
+            {
+                if ((*stack_b)->nbr >= pivot)
+                    pa(stack_a, stack_b);
+                else
+                    rb(stack_b);
+            }
+    }
+    if ((*stack_b)->index < (*stack_b)->next->index)
+        sb(stack_b);
+    if (check_sorted(*stack_b))
+    {
+        while (!check_sorted_reverse(*stack_b))
+            rrb(stack_b);
+    }
+    quicksort_b(stack_a, stack_b);
+}
+
+/*
+    Fait la premiere partition, remplit le stack b des nombres inferieures au pivot.
+*/
+
+void    quicksort_a(t_stack **stack_a, t_stack **stack_b)
+{
+    int pivot;
+    int size;
+
+    size = stack_size(*stack_a);
+    if (stack_size(*stack_a) <= 1 || check_sorted(*stack_a))
+        return;
+    pivot = get_pivot(*stack_a, size / 2);
+    while (!check_sorted(*stack_a) && *stack_a)
+    {        
+        if (size == 2)
+            sa(stack_a);
+        else if (size == 3)
+            sort_three(stack_a);
+        else
+        {
+            if ((*stack_a)->nbr <= pivot)
+            pb(stack_a, stack_b);
+            else
+            ra(stack_a);
+        }
+    }
+    if ((*stack_a)->index > (*stack_a)->next->index)
+        sa(stack_a);
+    if (check_sorted_reverse(*stack_a))
+    {
+        while (!check_sorted(*stack_a))
+            rra(stack_a);
+    }
+    quicksort_a(stack_a, stack_b);
+}
+
+void    quicksort(t_stack **stack_a, t_stack **stack_b)
+{
+    quicksort_a(stack_a, stack_b);
+    quicksort_b(stack_a, stack_b);
+    while (!stack_is_empty(*stack_b))
+        pa(stack_a, stack_b);
+}
+
+int main(int argc, char *argv[])
+{
+    t_stack *stack_a;
+    t_stack *stack_b;
+    int     size;
+    char    **split_argv = NULL;
+
+    if (argc < 2 || (argc == 2 && !check_argv(argv[1]))
+        || (!check_input(argv)))
+        ft_error(NULL, NULL);
+    if (argc == 2 && check_argv(argv[1]))
+    {
+        split_argv = ft_split(argv[1],' ');
+        argv = split_argv;
+        argc = 0;
+        while (argv[argc] != NULL)
+            argc++;
+    }
+    stack_a = fill_stack(argc, argv);
+    stack_b = NULL;
+    size = stack_size(stack_a);
+    stack_index(stack_a, size + 1);
+    push_swap(&stack_a, &stack_b, size);
+    free_stack(&stack_a);
+    free_stack(&stack_b);
+    return (0);
+}
+
+#include "push_swap.h"
+
+/*
+Ces champs sont initialisés à -1 comme une valeur sentinelle ou par défaut pour
+indiquer une absence de valeur significative ou une position indéfinie. 
+Dans de nombreux algorithmes de tri ou de manipulation de piles, 
+il est courant d'utiliser -1 pour indiquer une valeur par défaut ou une position
+non valide avant que ces champs ne soient correctement initialisés ou calculés.
+*/
+
+t_stack *new_stack(int nbr)
+{
+    t_stack *new;
+
+    new = (t_stack *)malloc(sizeof(t_stack));
+    if (!new)
+    	ft_error(NULL, NULL);
+    new->nbr = nbr;
+    new->index = -1;
+    new->pos = -1;
+    new->next = NULL;
+    return (new);
+}
+
+t_stack *get_bottom(t_stack *stack)
+{
+    while (stack && stack->next != NULL)
+        stack = stack->next;
+    return (stack);
+}
+
+t_stack *get_before_bottom(t_stack *stack)
+{
+    while (stack && stack->next && stack->next->next != NULL)
+        stack = stack->next;
+    return (stack);
+}
+
+void    add_bottom(t_stack **stack, t_stack *new)
+{
+    t_stack *end;
+    
+    if (!new)
+        return;
+    if (!*stack)
+    {
+        *stack = new;
+        return;
+    }
+    end = get_bottom(*stack);
+    end->next = new;
+}
+
+int stack_size(t_stack *stack)
+{
+    int size;
+
+    size = 0;
+    if (!stack)
+        return (0);
+    while (stack)
+    {
+        stack = stack->next;
+        size++;
+    }
+    return (size);
+}
+
+#include "push_swap.h"
+
+void	ft_push(t_stack **src, t_stack **dest)
+{
+	t_stack	*tmp;
+
+	if (*src == NULL)
+		return;
+	tmp = (*src)->next;
+	(*src)->next = *dest;
+	*dest = *src;
+	*src = tmp;
+}
+
+void	pa(t_stack **stack_a, t_stack **stack_b)
+{
+	ft_push(stack_b, stack_a);
+	ft_printf("pa\n");
+}
+
+void	pb(t_stack **stack_a, t_stack **stack_b)
+{
+	ft_push(stack_a, stack_b);
+	ft_printf("pb\n");
+}
+
+#include "push_swap.h"
+
+void    reverse_rotate(t_stack **stack)
+{
+    t_stack *bottom;
+    t_stack *tmp;
+    t_stack *before_bottom;
+
+    bottom = get_bottom(*stack);
+    before_bottom = get_before_bottom(*stack);
+    tmp = *stack;
+    *stack = bottom;
+    (*stack)->next = tmp;
+    before_bottom->next = NULL;
+}
+
+void    rra(t_stack **stack_a)
+{
+    reverse_rotate(stack_a);
+    ft_printf("rra\n");
+}
+
+void    rrb(t_stack **stack_b)
+{
+    reverse_rotate(stack_b);
+    ft_printf("rrb\n");
+}
+
+void    rrr(t_stack **stack_a, t_stack **stack_b)
+{
+    reverse_rotate(stack_a);
+    reverse_rotate(stack_b);
+    ft_printf("rrr\n");
+}
+
+#include "push_swap.h"
+
+void	ft_rotate(t_stack **stack)
+{
+    t_stack *bottom;
+    t_stack *tmp;
+
+	tmp = *stack;
+	*stack = (*stack)->next;
+    bottom = get_bottom(*stack);
+	tmp->next = NULL;
+	bottom->next = tmp;
+}
+
+void	ra(t_stack **stack_a)
+{
+	ft_rotate(stack_a);
+	ft_printf("ra\n");
+}
+
+void	rb(t_stack **stack_b)
+{
+	ft_rotate(stack_b);
+	ft_printf("rb\n");
+}
+
+void	rr(t_stack **stack_a, t_stack **stack_b)
+{
+    ra(stack_a);
+	rb(stack_b);
+	ft_printf("rr\n");
+}
+
+#include "push_swap.h"
+
+void	ft_swap(t_stack *stack)
+{
+	int	tmp;
+
+	if (stack == NULL || stack->next == NULL)
+		return;
+	tmp = stack->nbr;
+	stack->nbr = stack->next->nbr;
+	stack->next->nbr = tmp;
+	tmp = stack->index;
+	stack->index = stack->next->index;
+	stack->next->index = tmp;
+}
+
+void	sa(t_stack **stack_a)
+{
+	ft_swap(*stack_a);
+	ft_printf("sa\n");
+}
+
+void	sb(t_stack **stack_b)
+{
+	ft_swap(*stack_b);
+	ft_printf("sb\n");
+}
+
+void	ss(t_stack **stack_a, t_stack **stack_b)
+{
+	ft_swap(*stack_a);
+	ft_swap(*stack_b);
+	ft_printf("ss\n");
+}
+#include "push_swap.h"
+
+int	ft_nbrcmp(const char *s1, const char *s2)
+{
+	int	i;
+	int	j;
+
+	i = 0;
+	j = 0;
+	if (s1[i] == '+')
+		i++;
+	if (s2[j] == '+')
+		j++;
+	while (s1 && s2 && s1[i] == s2[i])
+    {
+		i++;
+		j++;
+    }
+	return ((unsigned char)s1[i] - (unsigned char)s2[j]);
+}
+
+void	ft_error(t_stack **stack_a, t_stack **stack_b)
+{
+	if (*stack_a != NULL)
+		free_stack(stack_a);
+	if (*stack_b != NULL)
+		free_stack(stack_b);
+	write(2, "Error\n", 6);
+}
+
+int	check_argv(char *s1)
+{
+	int	i;
+
+	i = 0;
+	while (s1[i] !='\0')
+	{
+		if (!ft_isdigit(s1[i]) && s1[i] != ' ' &&
+			s1[i] != '+' && s1[i] != '-')
+			return (0);
+		i++;
+	}
+	return (1);
+}
+
+int	stack_is_empty(t_stack *stack)
+{
+	if (stack == NULL || stack->next == NULL)
+		return (1);
+	else
+		return (0);
+}
+#ifndef PUSH_SWAP_H
+# define PUSH_SWAP_H
+
+# include <limits.h>
+# include <unistd.h>
+# include <stdlib.h>
+# include "libft/libft.h"
+# include "libft/ft_printf.h"
+
+typedef struct s_stack
+{
+	int				nbr;
+	int				index;
+	int				pos;
+	struct s_stack	*next;
+}	t_stack;
+
+t_stack *fill_stack(int argc, char *argv[]);
+void    free_stack(t_stack **stack);
+void    stack_index(t_stack *stack, int size);
+
+int	arg_is_number(char *argv);
+int	arg_is_zero(char *argv);
+int	check_duplicata(char **argv);
+int	check_input(char **argv);
+
+int find_biggest(t_stack *stack);
+void    sort_three(t_stack **stack);
+int find_smallest(t_stack *stack);
+void    sort_three_reverse(t_stack **stack);
+
+int check_sorted(t_stack *stack);
+int check_sorted_reverse(t_stack *stack);
+void    push_swap(t_stack **stack_a, t_stack **stack_b, int size);
+int get_pivot(t_stack *stack, int i);
+void   quicksort_b(t_stack **stack_a, t_stack **stack_b);
+void    quicksort_a(t_stack **stack_a, t_stack **stack_b);
+void    quicksort(t_stack **stack_a, t_stack **stack_b);
+
+t_stack *new_stack(int nbr);
+t_stack *get_bottom(t_stack *stack);
+t_stack *get_before_bottom(t_stack *stack);
+void    add_bottom(t_stack **stack, t_stack *new);
+int stack_size(t_stack *stack);
+
+void	ft_push(t_stack **src, t_stack **dest);
+void	pa(t_stack **stack_a, t_stack **stack_b);
+void	pb(t_stack **stack_a, t_stack **stack_b);
+
+void    reverse_rotate(t_stack **stack);
+void    rra(t_stack **stack_a);
+void    rrb(t_stack **stack_b);
+void    rrr(t_stack **stack_a, t_stack **stack_b);
+
+void	ft_rotate(t_stack **stack);
+void	ra(t_stack **stack_a);
+void	rb(t_stack **stack_b);
+void	rr(t_stack **stack_a, t_stack **stack_b);
+
+void	ft_swap(t_stack *stack);
+void	sa(t_stack **stack_a);
+void	sb(t_stack **stack_b);
+void	ss(t_stack **stack_a, t_stack **stack_b);
+
+int	ft_nbrcmp(const char *s1, const char *s2);
+void	ft_error(t_stack **stack_a, t_stack **stack_b);
+int	check_argv(char *s1);
+int	stack_is_empty(t_stack *stack);
+
+#endif
+
+MAKEFILE 
+
+NAME = push_swap
+CC = gcc
+RM = rm -f
+CFLAGS = -Wall -Wextra -Werror
+LIBFT = ./libft/libft.a
+
+SRCS = main.c fill_free.c input_check.c little_sort.c manipulate_stack.c \
+       push.c reverse_rotate.c rotate.c swap.c utils.c
+HEAD = push_swap.h
+PUSH_SWAP_OBJS = $(SRCS:.c=.o)
+
+all: $(NAME)
+
+$(NAME): $(LIBFT) $(PUSH_SWAP_OBJS)
+	$(CC) $(CFLAGS) -o $(NAME) $(PUSH_SWAP_OBJS) $(LIBFT)
+
+$(LIBFT):
+	make -C ./libft
+
+%.o: %.c
+	cc $(CFLAGS) -c $< -o $@ -I .
+
+clean:
+	$(RM) $(PUSH_SWAP_OBJS)
+	make -C ./libft clean
+
+fclean: clean
+	$(RM) $(NAME)
+	make -C ./libft fclean
+
+re: fclean all
+
+.PHONY: all clean fclean re

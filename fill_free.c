@@ -18,22 +18,27 @@ pile a sous la forme d’une liste d’entiers. Le premier paramètre est au
 sommet de la pile (attention donc à l’ordre).
 */
 
-t_stack *fill_stack(int argc, char *argv[])
+t_stack *fill_stack(int argc, char *argv[], int i)
 {
-    int     i;
     int     nbr;
     t_stack *stack_a;
 
-    i = 1;
+    printf("%d\n", i);
+    if (i == 0)
+        argc += 1;
+    printf("%d\n", argc);
+    nbr = ft_atoi(argv[i]);
+    stack_a = new_stack((int)nbr);
+    if (nbr > INT_MAX || nbr < INT_MIN)
+        ft_error(&stack_a, NULL);
+    i++;
     while (i < argc)
     {
         nbr = ft_atoi(argv[i]);
         if (nbr > INT_MAX || nbr < INT_MIN)
-            ft_error(NULL, NULL);
-        if (i == argc - 1)
-            stack_a = new_stack(nbr);
+            ft_error(&stack_a, NULL);
         else
-            add_bottom(&stack_a, new_stack(nbr));
+            add_bottom(&stack_a, new_stack((int)nbr));
         i++;
     }
     return(stack_a);

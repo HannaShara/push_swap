@@ -33,7 +33,7 @@ int	arg_is_zero(char *argv)
 	i = 0;
 	if (argv[i] == '+' || argv[i] == '-')
 		i++;
-	while (argv[i] == 0)
+	while (argv[i] == '0')
 		i++;
 	if (argv[i] != '\0')
 		return (0);
@@ -51,7 +51,7 @@ int	check_duplicata(char **argv)
 		j = 1;
 		while (argv[j])
 		{
-			if (j != i && !ft_nbrcmp(argv[i], argv[j]))
+			if (j != i && ft_nbrcmp(argv[i], argv[j]) == 0)
 				return (1);
 			j++;
 		}

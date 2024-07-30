@@ -27,7 +27,7 @@ typedef struct s_stack
 	struct s_stack	*next;
 }	t_stack;
 
-t_stack *fill_stack(int argc, char *argv[], int i);
+t_stack *fill_stack(int argc, char *argv[]);
 void    free_stack(t_stack **stack);
 void    stack_index(t_stack *stack, int size);
 

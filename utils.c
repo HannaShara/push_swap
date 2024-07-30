@@ -56,11 +56,11 @@ int	check_argv(char *s1)
 	}
 	return (1);
 }
-
+/*
 int	stack_is_empty(t_stack *stack)
 {
 	if (stack == NULL || stack->next == NULL)
 		return (1);
 	else
 		return (0);
-}
+}*/

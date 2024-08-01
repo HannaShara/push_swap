@@ -16,6 +16,7 @@
 # include <limits.h>
 # include <unistd.h>
 # include <stdlib.h>
+# include <stdio.h>
 # include "libft/libft.h"
 # include "libft/ft_printf.h"
 
@@ -44,10 +45,12 @@ void    sort_three_reverse(t_stack **stack);
 int check_sorted(t_stack *stack);
 int check_sorted_reverse(t_stack *stack);
 void    push_swap(t_stack **stack_a, t_stack **stack_b, int size);
-int get_pivot(t_stack *stack, int i);
+/*int get_pivot(t_stack *stack, int i);
 void   quicksort_b(t_stack **stack_a, t_stack **stack_b);
 void    quicksort_a(t_stack **stack_a, t_stack **stack_b);
-void    quicksort(t_stack **stack_a, t_stack **stack_b);
+void    quicksort(t_stack **stack_a, t_stack **stack_b); */
+void    partition(t_stack **stack_a, t_stack **stack_b, int size);
+void    research_next(t_stack **stack_a, t_stack **stack_b);
 
 t_stack *new_stack(int nbr);
 t_stack *get_bottom(t_stack *stack);

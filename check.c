@@ -1,37 +1,42 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   push.c                                             :+:      :+:    :+:   */
+/*   check.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hsharame <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/07/17 14:39:36 by hsharame          #+#    #+#             */
-/*   Updated: 2024/07/17 14:39:38 by hsharame         ###   ########.fr       */
+/*   Created: 2024/08/07 15:32:49 by hsharame          #+#    #+#             */
+/*   Updated: 2024/08/07 15:32:51 by hsharame         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
 
-void	ft_push(t_stack **src, t_stack **dest)
-{
-	t_stack	*tmp;
+/*
+    Return 0 si ce n'est pas trie.
+*/
 
-	if (*src == NULL)
-		return ;
-	tmp = (*src)->next;
-	(*src)->next = *dest;
-	*dest = *src;
-	*src = tmp;
+int	check_sorted(t_stack *stack)
+{
+	while (stack->next != NULL)
+	{
+		if (stack->nbr > stack->next->nbr)
+			return (0);
+		stack = stack->next;
+	}
+	return (1);
 }
 
-void	pa(t_stack **stack_a, t_stack **stack_b)
+/*
+    Return 0 si ce n'est pas trie dans l'ordre decroissant.
+*/
+int	check_sorted_reverse(t_stack *stack)
 {
-	ft_push(stack_b, stack_a);
-	ft_printf("pa\n");
-}
-
-void	pb(t_stack **stack_a, t_stack **stack_b)
-{
-	ft_push(stack_a, stack_b);
-	ft_printf("pb\n");
+	while (stack->next != NULL)
+	{
+		if (stack->nbr < stack->next->nbr)
+			return (0);
+		stack = stack->next;
+	}
+	return (1);
 }

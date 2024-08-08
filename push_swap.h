@@ -28,6 +28,11 @@ typedef struct s_stack
 	struct s_stack	*next;
 }	t_stack;
 
+int check_chunk(t_stack **stack, int until);
+void    chunk(t_stack **stack_a, t_stack **stack_b, int until);
+int	best_spot(t_stack **stack_a, t_stack **stack_b);
+void	move_to_b(t_stack **stack_a, t_stack **stack_b);
+
 t_stack *fill_stack(int argc, char *argv[]);
 void    free_stack(t_stack **stack);
 void    stack_index(t_stack *stack, int size);
@@ -39,18 +44,16 @@ int	check_input(char **argv);
 
 int find_biggest(t_stack *stack);
 void    sort_three(t_stack **stack);
-int find_smallest(t_stack *stack);
-void    sort_three_reverse(t_stack **stack);
+void    sort_five(t_stack **stack_a, t_stack **stack_b, int size);
 
 int check_sorted(t_stack *stack);
 int check_sorted_reverse(t_stack *stack);
 void    push_swap(t_stack **stack_a, t_stack **stack_b, int size);
-/*int get_pivot(t_stack *stack, int i);
-void   quicksort_b(t_stack **stack_a, t_stack **stack_b);
-void    quicksort_a(t_stack **stack_a, t_stack **stack_b);
-void    quicksort(t_stack **stack_a, t_stack **stack_b); */
+void    position_update(t_stack **stack);
 void    partition(t_stack **stack_a, t_stack **stack_b, int size);
 void    research_next(t_stack **stack_a, t_stack **stack_b);
+void    research_next_cheap(t_stack **stack_b, int key);
+void    worst(t_stack **stack_b, int key);
 
 t_stack *new_stack(int nbr);
 t_stack *get_bottom(t_stack *stack);
@@ -80,6 +83,6 @@ void	ss(t_stack **stack_a, t_stack **stack_b);
 int	ft_nbrcmp(const char *s1, const char *s2);
 int	ft_error(t_stack **stack_a, t_stack **stack_b);
 int	check_argv(char *s1);
-int	stack_is_empty(t_stack *stack);
+int	abs_value(int i);
 
 #endif

@@ -14,12 +14,12 @@
 
 void	ft_rotate(t_stack **stack)
 {
-    t_stack *bottom;
-    t_stack *tmp;
+	t_stack	*bottom;
+	t_stack	*tmp;
 
 	tmp = *stack;
 	*stack = (*stack)->next;
-    bottom = get_bottom(*stack);
+	bottom = get_bottom(*stack);
 	tmp->next = NULL;
 	bottom->next = tmp;
 }
@@ -38,7 +38,8 @@ void	rb(t_stack **stack_b)
 
 void	rr(t_stack **stack_a, t_stack **stack_b)
 {
-    ra(stack_a);
+	ra(stack_a);
 	rb(stack_b);
 	ft_printf("rr\n");
 }
+	

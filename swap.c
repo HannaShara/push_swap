@@ -17,7 +17,7 @@ void	ft_swap(t_stack *stack)
 	int	tmp;
 
 	if (stack == NULL || stack->next == NULL)
-		return;
+		return ;
 	tmp = stack->nbr;
 	stack->nbr = stack->next->nbr;
 	stack->next->nbr = tmp;

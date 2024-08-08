@@ -12,59 +12,48 @@
 
 #include "push_swap.h"
 
-int find_biggest(t_stack *stack)
+int	find_biggest(t_stack *stack)
 {
-    int biggest;
+	int	biggest;
 
-    biggest = stack->nbr;
-    while(stack)
-    {
-        if (biggest < stack->nbr)
-            biggest = stack->nbr;
-        stack = stack->next;
-    }
-    return (biggest);
+	biggest = stack->index;
+	while (stack)
+	{
+		if (biggest < stack->index)
+			biggest = stack->index;
+		stack = stack->next;
+	}
+	return (biggest);
 }
 
-void    sort_three(t_stack **stack)
+void	sort_three(t_stack **stack)
 {
-    int biggest;
+	int	biggest;
 
-    if (check_sorted(*stack))
-        return;
-    biggest = find_biggest(*stack);
-    if ((*stack)->nbr == biggest)
-        ra(stack);
-    else if ((*stack)->next->nbr == biggest)
-        rra(stack);
-    if ((*stack)->nbr > (*stack)->next->nbr)
-        sa(stack);
+	if (check_sorted(*stack))
+		return ;
+	biggest = find_biggest(*stack);
+	if ((*stack)->index == biggest)
+		ra(stack);
+	else if ((*stack)->next->index == biggest)
+		rra(stack);
+	if ((*stack)->index > (*stack)->next->index)
+		sa(stack);
 }
 
-int find_smallest(t_stack *stack)
+void	sort_five(t_stack **stack_a, t_stack **stack_b, int size)
 {
-    int smallest;
-
-    smallest = stack->nbr;
-    while(stack)
-    {
-        if (smallest > stack->nbr)
-            smallest = stack->nbr;
-        stack = stack->next;
-    }
-    return (smallest);
-}
-void    sort_three_reverse(t_stack **stack)
-{
-    int smallest;
-
-    if (check_sorted_reverse(*stack))
-        return;
-    smallest = find_smallest(*stack);
-    if ((*stack)->nbr == smallest)
-        rb(stack);
-    else if ((*stack)->next->nbr == smallest)
-        rrb(stack);
-    if ((*stack)->nbr < (*stack)->next->nbr)
-        sb(stack);
+	while (size)
+	{
+		if ((*stack_a)->index == 1 || (*stack_a)->index == 2)
+			pb(stack_a, stack_b);
+		else
+			ra(stack_a);
+		size--;
+	}
+	sort_three(stack_a);
+	if (!check_sorted_reverse(*stack_b))
+		sb(stack_b);
+	pa(stack_a, stack_b);
+	pa(stack_a, stack_b);
 }
